@@ -1,5 +1,5 @@
 <template>
-  <input type='text' v-model='text' />
+  <input type='text' v-model='text' @keyup.enter='addItemHandler'/>
   <button @click='addItemHandler'>
     +
   </button>

@@ -2,22 +2,22 @@
   <div>
     <AddItemForm @addItem='createTodo' />
   </div>
-  <TaskItem v-for='todo in todolists'
-            :title='todo.title'
-            :is-done='true'
-            :id='todo.id'
-            :key='todo.id'
-            @remove-item='removeTodo' />
+  <todolist-item v-for='todo in todolists'
+                 :todolist='todo'
+                 :tasks='tasks[todo.id]'
+                 :key='todo.id'
+                 @remove-item='removeTodo'
+                 @addTask='createNewTask' />
 </template>
 
 <script>
-import TaskItem from './TaskItem.vue';
+import TodolistItem from './TodolistItem.vue';
 import AddItemForm from './AddItemForm.vue';
 import { v1 } from 'uuid';
 
 export default {
   name: 'TodolistsList',
-  components: { AddItemForm, TaskItem },
+  components: { TodolistItem, AddItemForm },
   data() {
     return {
       todolists: [
@@ -27,10 +27,10 @@ export default {
       tasks: {
         ['1']: [
           { id: v1(), title: 'HTML&CSS', isDone: true },
-          { id: v1(), title: 'JS', isDone: true },
+          { id: v1(), title: 'JS', isDone: false },
         ],
         ['2']: [
-          { id: v1(), title: 'Milk', isDone: true },
+          { id: v1(), title: 'Milk', isDone: false },
           { id: v1(), title: 'React Book', isDone: true },
         ],
       },
@@ -39,9 +39,15 @@ export default {
   methods: {
     removeTodo(id) {
       this.todolists = this.todolists.filter(t => t.id !== id);
+
     },
     createTodo(title) {
-      this.todolists.push({ id: v1(), title, filter: 'all' });
+      const todoId = v1();
+      this.todolists.push({ id: todoId, title, filter: 'all' });
+      this.tasks = { ...this.tasks, [todoId]: [] };
+    },
+    createNewTask(title, todoId) {
+      this.tasks[todoId] = [...this.tasks[todoId], { id: v1(), title, isDone: false }];
     },
   },
 };

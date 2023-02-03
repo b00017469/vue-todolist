@@ -1,25 +1,25 @@
 <template>
   <div>
-    <input type='checkbox' checked='{{isDone}}'/>
-    <label>{{title}}</label>
-    <button @click="$emit('removeItem', id)">Delete</button>
+    <input type='checkbox' v-model='isDone'>
+    <EditableSpan :text='task.title' />
+    <button>del</button>
   </div>
 </template>
 
 <script>
+import EditableSpan from './EditableSpan.vue';
+
 export default {
   name: 'TaskItem',
+  components: { EditableSpan },
   props: {
-    title: String,
-    isDone: Boolean,
-    id: String,
+    task: {},
   },
-  data(){
-    return{
-
-    }
-  }
-
+  data() {
+    return {
+      isDone: this.task.isDone,
+    };
+  },
 };
 </script>
 
